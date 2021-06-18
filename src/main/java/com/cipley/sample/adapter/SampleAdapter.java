@@ -15,13 +15,13 @@ import reactor.core.publisher.Mono;
 @Component
 public class SampleAdapter {
 
-	@Value("${scheme}")
+	@Value("${scheme:http}")
 	private String scheme;
 	
-	@Value("${host}")
+	@Value("${host:localhost}")
 	private String host;
 	
-	@Value("${port}")
+	@Value("${port:9000}")
 	private int port;
 	
 	@Autowired

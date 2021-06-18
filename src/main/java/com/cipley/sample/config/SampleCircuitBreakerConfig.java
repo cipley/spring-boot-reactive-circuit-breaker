@@ -30,7 +30,7 @@ public class SampleCircuitBreakerConfig {
 	@Value("${circuitbreaker.sliding-window-size}")
 	private int slidingWindowSize;
 	
-	@Value("${circuitbreaker.wait-duration-open}")
+	@Value("${circuitbreaker.wait-duration-open.ms}")
 	private long waitDurationOpen;
 	
 	@Value("${circuitbreaker.time-limiter.ms}")

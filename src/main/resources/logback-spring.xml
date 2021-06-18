@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="rootLogLevel" value="${ROOT_LOG_LEVEL:-DEBUG}" />
+    <property name="logLevel" value="${LOG_LEVEL:-DEBUG}" />
+    <property name="metricLogLevel" value="${METRIC_LOG_LEVEL:-DEBUG}" />
+
+    <property name="logQueueSize" value="${LOG_QUEUE_SIZE:-8196}" />
+    <property name="discardThreshold" value="${LOG_DISCARD_THRESHOLD_PERCENTAGE:-20}" />
+    <property name="maxFlushTime" value="${LOG_MAX_FLUSH_TIME_MS:-500}" />
+    <property name="neverBlock" value="${LOG_NEVER_BLOCK:-false}" />
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${logQueueSize}</queueSize>
+        <maxFlushTime>${maxFlushTime}</maxFlushTime>
+        <discardingThreshold>${discardThreshold}</discardingThreshold>
+        <neverBlock>${neverBlock}</neverBlock>
+        <includeCallerData>false</includeCallerData>
+        <appender-ref ref="CONSOLE" />
+    </appender>
+
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_JSON" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${logQueueSize}</queueSize>
+        <maxFlushTime>${maxFlushTime}</maxFlushTime>
+        <discardingThreshold>${discardThreshold}</discardingThreshold>
+        <neverBlock>${neverBlock}</neverBlock>
+        <includeCallerData>false</includeCallerData>
+        <appender-ref ref="CONSOLE_JSON" />
+    </appender>
+
+    <logger name="id.co.telkomsel.digitalcore.co" level="${logLevel}" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <logger name="id.co.telkomsel.digitalcore.bs" level="${logLevel}" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <logger name="id.co.telkomsel.digitalcore.bi" level="${logLevel}" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <logger name="id.co.telkomsel.digitalcore.rv" level="${logLevel}" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+
+    <logger name="id.co.telkomsel.digitalcore.common.logging.util.JsonLogger" level="${logLevel}" additivity="false">
+        <appender-ref ref="ASYNC_JSON" />
+    </logger>
+
+    <logger name="id.co.telkomsel.digitalcore.common.logging.util.MetricLogger" level="${metricLogLevel}" additivity="false">
+        <appender-ref ref="ASYNC_JSON" />
+    </logger>
+
+    <root level="${rootLogLevel}">
+        <appender-ref ref="ASYNC" />
+    </root>
+</configuration>
