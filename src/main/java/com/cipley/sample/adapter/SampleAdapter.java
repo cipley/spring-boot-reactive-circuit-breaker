@@ -10,9 +10,11 @@ import com.cipley.sample.model.ResponseModel;
 import com.cipley.sample.model.exception.BadRequestException;
 import com.cipley.sample.model.exception.ServiceUnavailableException;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class SampleAdapter {
 
 	@Value("${scheme:http}")
@@ -37,11 +39,13 @@ public class SampleAdapter {
 						.build())
 				.retrieve()
 				.onStatus(HttpStatus::is4xxClientError, clientError -> {
+					log.debug("HTTP 4xx, {}", request);
 					return clientError.bodyToMono(ResponseModel.class)
 							.flatMap(error -> Mono.error(new BadRequestException(Short.valueOf(String.valueOf(error.getStatus())), 
 									error.getMessage())));
 				})
 				.onStatus(HttpStatus::is5xxServerError, serverError -> {
+					log.debug("HTTP 5xx, {}", request);
 					return serverError.bodyToMono(ResponseModel.class)
 							.flatMap(error -> Mono.error(new ServiceUnavailableException(Short.valueOf(String.valueOf(error.getStatus())), 
 									error.getMessage())));

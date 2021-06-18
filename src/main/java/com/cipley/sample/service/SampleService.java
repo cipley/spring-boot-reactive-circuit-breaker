@@ -24,7 +24,7 @@ public class SampleService {
 		return sampleCircuitBreaker.run(adapter.call(param)
 				, fallback -> {
 					//fallback
-					log.warn("Fallback Triggered");
+					log.warn("Fallback Triggered: {}", param);
 					return Mono.just(new ResponseModel(200, "Fallback"));
 				});
 	}

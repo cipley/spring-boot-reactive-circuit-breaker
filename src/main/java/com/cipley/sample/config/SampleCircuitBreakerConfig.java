@@ -12,7 +12,7 @@ import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFac
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.cipley.sample.model.exception.BadRequestException;
+import com.cipley.sample.model.exception.ServiceUnavailableException;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
@@ -54,7 +54,7 @@ public class SampleCircuitBreakerConfig {
 							.minimumNumberOfCalls(minNumberOfCalls)
 							.slidingWindowSize(slidingWindowSize)
 							.waitDurationInOpenState(Duration.ofMillis(waitDurationOpen))
-							.ignoreExceptions(BadRequestException.class)
+							.ignoreExceptions(ServiceUnavailableException.class)
 							.build())
 					.timeLimiterConfig(TimeLimiterConfig.custom()
 							.timeoutDuration(Duration.ofMillis(timeLimiter))
